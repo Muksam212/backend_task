@@ -1,7 +1,10 @@
 from django.urls import path
 from api import views
+from knox import views as knox_views
+#Knox provides easy to use authentication for Django REST Framework
+
 from api.views import (AccountList, AccountDetails
-,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails, RegisterAPI)
+,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails, LoginAPI, RegisterAPI)
 
 app_name = 'api'
 
@@ -19,6 +22,9 @@ urlpatterns = [
     path('api/<int:id>/location/', LocationDetails.as_view(), name='location-details'),
 
     #register
-    path('api/register/', RegisterAPI.as_view(), name='register')
+    path('api/register/', RegisterAPI.as_view(), name='register'),
+    path('api/login/', LoginAPI.as_view(), name='login'),
+    path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
+    path('api/logoutall/', knox_views.LogoutAllView, name='logoutall')
 
 ]
