@@ -1,4 +1,3 @@
-import email
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -53,7 +52,7 @@ class Account(User):
     bio = models.TextField(max_length=100)
     ph_number = models.PositiveIntegerField()
     area_of_interest = models.ManyToManyField(Interest, related_name='account', blank=True)
-    users_document = models.ManyToManyField(Document, related_name='documents', blank=True)
+    users_document = models.ManyToManyField(Document, related_name='accounts', blank=True)
     birthday = models.DateField()
     location_home = models.ForeignKey(Location, related_name='users_home', on_delete=models.CASCADE)
     location_office = models.ForeignKey(Location, related_name='users_office',on_delete=models.CASCADE)

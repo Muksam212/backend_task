@@ -94,7 +94,7 @@ class LocationDistance(APIView):
                 pnt = Distance('Point({} {}'.format(data['latitude'],data['longitude']))
                 print(pnt)
                 
-                ls = Location.objects.all().filter(point__distance__lt=(pnt))
+                ls = Location.objects.all().filter(point__distance__lt=(pnt, Distance(km=1000)))
                 print(len(ls))
                 return Response({'Data', str(ls)})
 
