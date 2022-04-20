@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth import login
+from django.contrib.gis.measure import Distance
 
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import permissions
 from api.serializers import AccountSerializer, DocumentSerializer, InterestSerializer, LocationSerializer
 from rest_framework import generics, mixins
@@ -77,3 +79,26 @@ class LoginAPI(LoginView):
         user = serializer.validated_data['user']
         login(request,user)
         return super(LoginAPI,self).post(request,format=None)
+
+
+class LocationDistance(APIView):
+    def post(self, request):
+        serializer = LocationSerializer(data = request.data)
+
+        if serializer.is_valid():
+            try:
+                print(serializer.data)
+                data = serializer.data
+                print(data)
+
+                pnt = Distance('Point({} {}'.format(data['latitude'],data['longitude']))
+                print(pnt)
+                
+                ls = Location.objects.all().filter(point__distance__lt=(pnt))
+                print(len(ls))
+                return Response({'Data', str(ls)})
+
+            except Exception as e:
+                print(e)
+
+        return Response(serializer.errors)
