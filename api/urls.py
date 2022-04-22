@@ -5,8 +5,7 @@ from knox import views as knox_views
 
 from api.views import (AccountList, AccountDetails
 ,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails, LoginAPI,
-RegisterAPI,LocationDistance)
-
+RegisterAPI,GetDistance)
 app_name = 'api'
 
 urlpatterns = [
@@ -28,6 +27,6 @@ urlpatterns = [
     path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
     path('api/logoutall/', knox_views.LogoutAllView, name='logoutall'),
 
-    path('api/track/distance/',LocationDistance.as_view(), name='api-track')
+    path('api/<int:id>/account/line/', GetDistance.as_view(), name='get-distance')
 
 ]

@@ -47,6 +47,7 @@ class Location(models.Model):
         return "{} -> {}".format(self.latitude, self.longitude)
 
 
+
 class Account(User):
     country = models.CharField(max_length=100)
     bio = models.TextField(max_length=100)
@@ -64,3 +65,8 @@ class Account(User):
         
     def __str__(self):
         return self.username
+
+
+    @property
+    def get_distance(self):
+        pass

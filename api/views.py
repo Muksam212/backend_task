@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.gis.measure import Distance
 
+from accounts.models import Account
+from math import sin, cos, radians
+from accounts.models import Location
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
@@ -12,6 +15,8 @@ from knox.models import AuthToken
 from api.serializers import RegisterSerializer, UserSerializer
 from knox.views import LoginView
 from rest_framework.authtoken.serializers import AuthTokenSerializer
+
+
 # Create your views here.
 
 
@@ -80,25 +85,7 @@ class LoginAPI(LoginView):
         login(request,user)
         return super(LoginAPI,self).post(request,format=None)
 
-
-class LocationDistance(APIView):
-    def post(self, request):
-        serializer = LocationSerializer(data = request.data)
-
-        if serializer.is_valid():
-            try:
-                print(serializer.data)
-                data = serializer.data
-                print(data)
-
-                pnt = Distance('Point({} {}'.format(data['latitude'],data['longitude']))
-                print(pnt)
-                
-                ls = Location.objects.all().filter(point__distance__lt=(pnt, Distance(km=1000)))
-                print(len(ls))
-                return Response({'Data', str(ls)})
-
-            except Exception as e:
-                print(e)
-
-        return Response(serializer.errors)
+class DistanceFormula(APIView):
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('id')
+        return get_object_or_404(Account, id = id)

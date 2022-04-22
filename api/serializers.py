@@ -22,11 +22,9 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['id','country','bio','ph_number','area_of_interest','users_document','birthday','location_home','location_office']
-        depth = 2
+        depth = 1
 
     
-
-
 #user authentication
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,5 +40,4 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'], validated_data['email'], validated_data['password'])
-
         return user
