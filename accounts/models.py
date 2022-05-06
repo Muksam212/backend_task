@@ -46,6 +46,11 @@ class Location(models.Model):
     def __str__(self):
         return "{} -> {}".format(self.latitude, self.longitude)
 
+class User(models.Model):
+    name=models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 
 class Account(User):
@@ -58,16 +63,22 @@ class Account(User):
     location_home = models.ForeignKey(Location, related_name='users_home', on_delete=models.CASCADE)
     location_office = models.ForeignKey(Location, related_name='users_office',on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs):
-        self.username = self.email
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.username = self.email
+    #     return super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.username
+    # def __str__(self):
+    #     return self.username
 
-    def get_api_like_url(self):
-        return reverse('app:account-list', kwargs={'id':self.id})
+    @property
+    def schedule_task(self):
+        if self.birthday == "2022-05-04":
+            return "Happy Birthday Sachin"
+        elif self.birthday == "2022-05-01":
+            return 'Happy Birthday Muksam'
+        else:
+            return HttpResponse("None of User have a birthday")
 
     @property
     def get_distance(self):
-        return (sin(dlat/2)**2 + cos(lat1) * cos(lat2)*sin(dlon/2)**2)
+        return (sin(self.dlat/2)**2 + cos(self.lat1) * cos(self.lat2)*sin(self.dlon/2)**2)

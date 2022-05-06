@@ -5,7 +5,7 @@ from knox import views as knox_views
 
 from api.views import (AccountList, AccountDetails
 ,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails, LoginAPI,
-RegisterAPI,DistanceFormula)
+RegisterAPI,DistanceFormula, RandomCoordinate)
 
 
 app_name = 'api'
@@ -30,5 +30,8 @@ urlpatterns = [
     path('api/logoutall/', knox_views.LogoutAllView, name='logoutall'),
 
     #to return the geojson
-    path('api/<int:id>/account/line/', DistanceFormula.as_view(), name='get-distance')
+    path('api/<int:id>/account/line/', DistanceFormula.as_view(), name='get-distance'),
+
+
+    path('api/random/coordinate/',RandomCoordinate.as_view(), name='random-coordinate')
 ]

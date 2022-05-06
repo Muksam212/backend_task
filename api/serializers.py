@@ -12,7 +12,7 @@ class DocumentSerializer(serializers.ModelSerializer):
         model = Document
         fields = ['id','file']
 
-    
+
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
@@ -23,7 +23,16 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = ['id','country','bio','ph_number','area_of_interest','users_document','birthday','location_home','location_office']
         depth = 1
-    
+
+    @property
+    def schedule_task(self):
+        if self.birthday == "2022-05-04":
+            return "Happy Birthday Sachin"
+        elif self.birthday == "2022-05-01":
+            return 'Happy Birthday Muksam'
+        else:
+            return HttpResponse("None of User have a birthday")
+        
 #user authentication
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,7 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ('id', 'username','email','password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

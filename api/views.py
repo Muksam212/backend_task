@@ -90,16 +90,33 @@ class DistanceFormula(APIView):
     def get_object(self, **kwargs):
         id=self.kwargs.get('id')
         return get_object_or_404(Account, id=id)
-        
+
     def post(self, request, *args, **kwargs):
-        lat1=radians(45.56)
-        lon1=radians(34.56)
-        lat2=radians(33.45)
-        lon2=radians(45.67)
+        self.lat1=radians(45.56)
+        self.lon1=radians(34.56)
+        self.lat2=radians(33.45)
+        self.lon2=radians(45.67)
 
-        dlon=lon2-lat1
-        dlat=lat2-lat1
+        self.dlon=self.lon2-self.lat1
+        self.dlat=self.lat2-self.lat1
 
-        a=(sin(dlat/2)**2+cos(lat1)*cos(lat2)*sin(dlon/2)**2)
-        print(a)
-        return super().post(request, *args, **kwargs)
+        self.a=(sin(self.dlat/2)**2+cos(self.lat1)*cos(self.lat2)*sin(self.dlon/2)**2)
+        print({'Result of userline vector using distance formula form home to office':self.a})
+        return HttpResponse("successful")
+
+
+class RandomCoordinate(APIView):
+
+    #by taking the random co-ordinate
+    def post(self, request):
+        self.lat1 = radians(22.67)
+        self.lon1 = radians(33.78)
+        self.lat2 = radians(44.67)
+        self.lon2 = radians(55.89)
+
+        self.dlon=self.lon2-self.lat1
+        self.dlat=self.lat2-self.lat1
+
+        self.a=(sin(self.dlat/2)**2+cos(self.lat1)*cos(self.lat2)*sin(self.dlon/2)**2)
+        print({"Result":self.a})
+        return HttpResponse("successful:")
