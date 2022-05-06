@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login
+from django.http import Http404, HttpResponse
 
-from accounts.models import Account
+
 from math import sin, cos, radians
-from accounts.models import Location
+from accounts.models import Location, Account
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
@@ -14,6 +15,7 @@ from knox.models import AuthToken
 from api.serializers import RegisterSerializer, UserSerializer
 from knox.views import LoginView
 from rest_framework.authtoken.serializers import AuthTokenSerializer
+
 
 
 # Create your views here.
@@ -28,7 +30,7 @@ class InterestDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Interest.objects.all()
     serializer_class = InterestSerializer
     lookup_field = 'id'
-    
+
 
 #Document Api
 class DocumentList(generics.ListCreateAPIView):
@@ -86,19 +88,18 @@ class LoginAPI(LoginView):
 
 class DistanceFormula(APIView):
     def get_object(self, **kwargs):
-        id = self.kwargs.get('id')
-        return get_object_or_404(Account, id = id)
-
+        id=self.kwargs.get('id')
+        return get_object_or_404(Account, id=id)
+        
     def post(self, request, *args, **kwargs):
-        lh1 = radians(22.45)
-        lh2 = radians(33.56)
-        lo1 = radians(56.68)
-        lo2 = radians(78.56)
+        lat1=radians(45.56)
+        lon1=radians(34.56)
+        lat2=radians(33.45)
+        lon2=radians(45.67)
 
-        dlon = lh2 - lh1
-        dlat = lo2 - lo1
+        dlon=lon2-lat1
+        dlat=lat2-lat1
 
-        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2)*sin(dlon/2)**2
-        c = 2 * atan2(sqrt(a), sqrt(1-a))
-
+        a=(sin(dlat/2)**2+cos(lat1)*cos(lat2)*sin(dlon/2)**2)
+        print(a)
         return super().post(request, *args, **kwargs)

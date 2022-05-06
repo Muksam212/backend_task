@@ -58,7 +58,6 @@ class Account(User):
     location_home = models.ForeignKey(Location, related_name='users_home', on_delete=models.CASCADE)
     location_office = models.ForeignKey(Location, related_name='users_office',on_delete=models.CASCADE)
 
-
     def save(self, *args, **kwargs):
         self.username = self.email
         return super().save(*args, **kwargs)
@@ -66,7 +65,9 @@ class Account(User):
     def __str__(self):
         return self.username
 
+    def get_api_like_url(self):
+        return reverse('app:account-list', kwargs={'id':self.id})
 
     @property
     def get_distance(self):
-        pass
+        return (sin(dlat/2)**2 + cos(lat1) * cos(lat2)*sin(dlon/2)**2)
