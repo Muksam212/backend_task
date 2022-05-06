@@ -23,7 +23,6 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = ['id','country','bio','ph_number','area_of_interest','users_document','birthday','location_home','location_office']
         depth = 1
-
     
 #user authentication
 class UserSerializer(serializers.ModelSerializer):

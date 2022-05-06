@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login
-from django.contrib.gis.measure import Distance
 
 from accounts.models import Account
 from math import sin, cos, radians
@@ -89,3 +88,17 @@ class DistanceFormula(APIView):
     def get_object(self, **kwargs):
         id = self.kwargs.get('id')
         return get_object_or_404(Account, id = id)
+
+    def post(self, request, *args, **kwargs):
+        lh1 = radians(22.45)
+        lh2 = radians(33.56)
+        lo1 = radians(56.68)
+        lo2 = radians(78.56)
+
+        dlon = lh2 - lh1
+        dlat = lo2 - lo1
+
+        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2)*sin(dlon/2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1-a))
+
+        return super().post(request, *args, **kwargs)

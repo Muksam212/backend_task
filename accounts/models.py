@@ -62,7 +62,7 @@ class Account(User):
     def save(self, *args, **kwargs):
         self.username = self.email
         return super().save(*args, **kwargs)
-        
+
     def __str__(self):
         return self.username
 
