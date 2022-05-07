@@ -64,6 +64,7 @@ class AccountDetails(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
 
 
+#Register through api
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
@@ -76,6 +77,7 @@ class RegisterAPI(generics.GenericAPIView):
         "token": AuthToken.objects.create(user)[1]
         })
 
+#Login through API
 class LoginAPI(LoginView):
     permission_classes =(permissions.AllowAny,)
 
@@ -86,12 +88,13 @@ class LoginAPI(LoginView):
         login(request,user)
         return super(LoginAPI,self).post(request,format=None)
 
+#calculate the distance between two points
 class DistanceFormula(APIView):
     def get_object(self, **kwargs):
         id=self.kwargs.get('id')
         return get_object_or_404(Account, id=id)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         self.lat1=radians(45.56)
         self.lon1=radians(34.56)
         self.lat2=radians(33.45)
@@ -105,6 +108,7 @@ class DistanceFormula(APIView):
         return HttpResponse("successful")
 
 
+#calculate the distance by taking random co-ordinate
 class RandomCoordinate(APIView):
 
     #by taking the random co-ordinate
