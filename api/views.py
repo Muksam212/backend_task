@@ -90,15 +90,17 @@ class LoginAPI(LoginView):
 
 #calculate the distance between two points
 class DistanceFormula(APIView):
-    def get_object(self, **kwargs):
-        id=self.kwargs.get('id')
-        return get_object_or_404(Account, id=id)
+    def get_object(self, id):
+        try:
+            return Accounts.objects.get(id=id)
+        except Account.DoesNotExist:
+            return Http404
 
-    def post(self, request):
-        self.lat1=radians(45.56)
-        self.lon1=radians(34.56)
-        self.lat2=radians(33.45)
-        self.lon2=radians(45.67)
+    def post(self, request, id):
+        self.lat1=radians(27.7294)
+        self.lon1=radians(85.3502)
+        self.lat2=radians(27.6723547)
+        self.lon2=radians(85.3140242)
 
         self.dlon=self.lon2-self.lat1
         self.dlat=self.lat2-self.lat1
@@ -113,14 +115,14 @@ class RandomCoordinate(APIView):
 
     #by taking the random co-ordinate
     def post(self, request):
-        self.lat1 = radians(22.67)
-        self.lon1 = radians(33.78)
-        self.lat2 = radians(44.67)
-        self.lon2 = radians(55.89)
+        self.lat1 = radians(27.7493)
+        self.lon1 = radians(85.3214)
+        self.lat2 = radians(27.6723547)
+        self.lon2 = radians(85.3140242)
 
         self.dlon=self.lon2-self.lat1
         self.dlat=self.lat2-self.lat1
 
         self.a=(sin(self.dlat/2)**2+cos(self.lat1)*cos(self.lat2)*sin(self.dlon/2)**2)
-        print({"Result":self.a})
-        return HttpResponse("successful:")
+        print({"Result of random co-ordinate":self.a})
+        return HttpResponse("successful:", int(self.a))
