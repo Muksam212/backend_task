@@ -22,6 +22,10 @@ class DateTimeModel(models.Model):
 class Interest(models.Model):
     interest_name = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name='Interest'
+        verbose_name_plural='Interests'
+
     def __str__(self):
         return self.interest_name
 

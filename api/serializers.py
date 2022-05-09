@@ -32,7 +32,7 @@ class AccountSerializer(serializers.ModelSerializer):
             return 'Happy Birthday Muksam'
         else:
             return HttpResponse("None of User have a birthday")
-        
+
 #user authentication
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
