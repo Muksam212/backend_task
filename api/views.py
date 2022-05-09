@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login
-from django.http import Http404, HttpResponse
+from django.http import Http404, JsonResponse, HttpResponse
 
 
 from math import sin, cos, radians
@@ -105,7 +105,9 @@ class DistanceFormula(APIView):
 
         self.a=(sin(self.dlat/2)**2+cos(self.lat1)*cos(self.lat2)*sin(self.dlon/2)**2)
         print({'Result of userline vector using distance formula form home to office':self.a})
-        return HttpResponse("successful")
+        return HttpResponse("Successful")
+
+
 
 
 #calculate the distance by taking random co-ordinate
