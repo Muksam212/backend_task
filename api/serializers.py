@@ -21,9 +21,11 @@ class LocationSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     #nested serializer
     accounts = InterestSerializer(many=True, read_only=True)
+    accounts = DocumentSerializer(many=True, read_only=True)
+    users_home = LocationSerializer(many=True, read_only=True)
     class Meta:
         model = Account
-        fields = ['id','country','biography','phone_number','accounts','area_of_interest','users_document','birthday','location_home','location_office']
+        fields = ['id','country','biography','phone_number','accounts','accounts','area_of_interest','users_home','users_document','birthday','location_home','location_office']
         depth = 1
 
 #user authentication
