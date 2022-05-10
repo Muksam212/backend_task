@@ -59,20 +59,14 @@ class User(models.Model):
 
 class Account(User):
     country = models.CharField(max_length=100)
-    bio = models.TextField(max_length=100)
-    ph_number = models.PositiveIntegerField()
-    area_of_interest = models.ManyToManyField(Interest, related_name='account', blank=True)
+    biography = models.TextField(max_length=100)
+    phone_number = models.PositiveIntegerField()
+    area_of_interest = models.ManyToManyField(Interest, related_name='accounts', blank=True)
     users_document = models.ManyToManyField(Document, related_name='accounts', blank=True)
     birthday = models.DateField()
     location_home = models.ForeignKey(Location, related_name='users_home', on_delete=models.CASCADE)
     location_office = models.ForeignKey(Location, related_name='users_office',on_delete=models.CASCADE)
 
-    # def save(self, *args, **kwargs):
-    #     self.username = self.email
-    #     return super().save(*args, **kwargs)
-
-    # def __str__(self):
-    #     return self.username
 
     @property
     def schedule_task(self):

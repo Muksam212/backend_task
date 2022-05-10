@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login
 from django.http import Http404, JsonResponse, HttpResponse
+from rest_framework.decorators import api_view
 
 
 from math import sin, cos, radians
@@ -89,11 +90,11 @@ class LoginAPI(LoginView):
         return super(LoginAPI,self).post(request,format=None)
 
 #calculate the distance between two points
+
 class DistanceFormula(APIView):
     def get(self, **kwargs):
         id = self.kwargs.get('id')
         return get_object_or_404(Account, id=id)
-
 
     def post(self, request, id):
         self.lat1=radians(27.7294)
@@ -131,3 +132,6 @@ class RandomCoordinate(APIView):
         self.a=(sin(self.dlat/2)**2+cos(self.lat1)*cos(self.lat2)*sin(self.dlon/2)**2)
         print({"Result of random co-ordinate":self.a})
         return HttpResponse("successful:")
+
+
+#creating the bulk

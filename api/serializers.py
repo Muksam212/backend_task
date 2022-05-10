@@ -19,19 +19,11 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ['id','latitude','longitude']
 
 class AccountSerializer(serializers.ModelSerializer):
+    accounts = InterestSerializer(many=True, read_only=True)
     class Meta:
         model = Account
-        fields = ['id','country','bio','ph_number','area_of_interest','users_document','birthday','location_home','location_office']
+        fields = ['id','country','biography','phone_number','accounts','area_of_interest','users_document','birthday','location_home','location_office']
         depth = 1
-
-    @property
-    def schedule_task(self):
-        if self.birthday == "2022-05-04":
-            return "Happy Birthday Sachin"
-        elif self.birthday == "2022-05-01":
-            return 'Happy Birthday Muksam'
-        else:
-            return HttpResponse("None of User have a birthday")
 
 #user authentication
 class UserSerializer(serializers.ModelSerializer):
