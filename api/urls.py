@@ -5,7 +5,7 @@ from knox import views as knox_views
 
 from api.views import (AccountList, AccountDetails
 ,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails, LoginAPI,
-RegisterAPI,DistanceFormula, RandomCoordinate)
+RegisterAPI,DistanceFormula, RandomCoordinate, AccountCreate)
 
 
 app_name = 'api'
@@ -42,5 +42,8 @@ urlpatterns = [
     path('api/<int:id>/account/line/', DistanceFormula.as_view(), name='get-distance'),
 
     #for the random co-ordinate
-    path('api/random/coordinate/',RandomCoordinate.as_view(), name='random-coordinate')
+    path('api/random/coordinate/',RandomCoordinate.as_view(), name='random-coordinate'),
+
+    #bulk create
+    path('api/bulkcreate/', AccountCreate.as_view(), name='bulk-create')
 ]

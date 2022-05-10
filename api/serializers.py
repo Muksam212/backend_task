@@ -19,6 +19,7 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ['id','latitude','longitude']
 
 class AccountSerializer(serializers.ModelSerializer):
+    #nested serializer
     accounts = InterestSerializer(many=True, read_only=True)
     class Meta:
         model = Account

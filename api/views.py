@@ -16,7 +16,7 @@ from knox.models import AuthToken
 from api.serializers import RegisterSerializer, UserSerializer
 from knox.views import LoginView
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-
+from rest_framework import status
 
 
 # Create your views here.
@@ -132,6 +132,3 @@ class RandomCoordinate(APIView):
         self.a=(sin(self.dlat/2)**2+cos(self.lat1)*cos(self.lat2)*sin(self.dlon/2)**2)
         print({"Result of random co-ordinate":self.a})
         return HttpResponse("successful:")
-
-
-#creating the bulk
