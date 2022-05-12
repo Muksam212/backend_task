@@ -3,6 +3,7 @@ from django.contrib.auth import login
 from django.http import Http404, JsonResponse, HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
+from django.core import exceptions
 
 
 from rest_framework.decorators import api_view
@@ -178,15 +179,13 @@ class AccountBulkCreate(APIView):
         new = list()
         for a in accounts:
             try:
-                u= User.objects.get(id=a['username'])
-                print(u,'ad')
+                u = User.objects.get(id=a['username'])
             except ObjectDoesNotExist:
                 pass
             else:
-                a['username'] = u
-
-            new.append(a)
-
+                if not Account.objects.filter(username = u).exists():
+                    a['username'] = u
+                    new.append(a)
         data = list()
         for n in new:
             data.append(
