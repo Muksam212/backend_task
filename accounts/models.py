@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.http import HttpResponse
+from django.template.defaultfilters import slugify
 # Create your models here.
 
 
@@ -54,24 +55,14 @@ class Location(models.Model):
 
 
 class Account(models.Model):
-    user=models.OneToOneField(User, on_delete=models.CASCADE)
+    username=models.OneToOneField(User, on_delete=models.CASCADE)
     country = models.CharField(max_length=100)
     biography = models.TextField(null=True, blank=True)
     phone_number = models.PositiveIntegerField()
-    area_of_interest = models.ManyToManyField(Interest, related_name='accounts', blank=True)
-    users_document = models.ManyToManyField(Document, related_name='accounts', blank=True)
     birthday = models.DateField()
-    location_home = models.ForeignKey(Location, related_name='users_home', on_delete=models.CASCADE)
-    location_office = models.ForeignKey(Location, related_name='users_office',on_delete=models.CASCADE)
+
+    class Meta:
+        ordering=('username',)
 
     def __str__(self):
-        return "{}".format(self.user)
-
-    @property
-    def schedule_task(self):
-        if self.birthday == "2022-05-04":
-            return "Happy Birthday Sachin"
-        elif self.birthday == "2022-05-01":
-            return "Happy Birthday Muksam"
-        else:
-            return HttpResponse("None of User have a birthday")
+        return "{}".format(self.username)

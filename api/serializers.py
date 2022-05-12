@@ -2,31 +2,34 @@ from rest_framework import serializers
 from accounts.models import Document, Location, Account, Interest
 from django.contrib.auth.models import User
 
-class InterestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Interest
-        fields = ['id','interest_name']
-
-class DocumentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Document
-        fields = ['id','file']
-
-
-class LocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Location
-        fields = ['id','latitude','longitude']
 
 class AccountSerializer(serializers.ModelSerializer):
     #nested serializer
-    accounts = InterestSerializer(many=True, read_only=True)
-    accounts = DocumentSerializer(many=True, read_only=True)
-    users_home = LocationSerializer(many=True, read_only=True)
     class Meta:
-        model = Account
-        fields = ['id','country','biography','phone_number','accounts','accounts','area_of_interest','users_home','users_document','birthday','location_home','location_office']
+        model=Account
+        fields=('username','country','biography','phone_number','birthday')
         depth = 1
+
+class InterestSerializer(serializers.ModelSerializer):
+    accounts=AccountSerializer(many=True, read_only=True)
+    class Meta:
+        model = Interest
+        fields = ('id','accounts')
+
+class DocumentSerializer(serializers.ModelSerializer):
+    accounts=AccountSerializer(many=True, read_only=True)
+    class Meta:
+        model = Document
+        fields = ('id','accounts')
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    users_home=AccountSerializer(many=True, read_only=True)
+    users_office=AccountSerializer(many=True, read_only=True)
+    class Meta:
+        model = Location
+        fields = ('id','users_home','users_office')
+
 
 #user authentication
 class UserSerializer(serializers.ModelSerializer):
@@ -40,7 +43,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username','email','password')
         extra_kwargs = {'password': {'write_only': True}}
-
+        
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'], validated_data['email'], validated_data['password'])
         return user

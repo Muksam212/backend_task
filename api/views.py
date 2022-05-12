@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login
 from django.http import Http404, JsonResponse, HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
+
+
 from rest_framework.decorators import api_view
-
-
 from math import sin, cos, radians
 from accounts.models import Location, Account
 from rest_framework.response import Response
@@ -58,6 +60,7 @@ class LocationDetails(generics.RetrieveUpdateDestroyAPIView):
 class AccountList(generics.ListCreateAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
+    ordering_fields=['username',]
 
 class AccountDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Account.objects.all()
@@ -111,7 +114,6 @@ class DistanceFormula(APIView):
 
 
 
-
 #calculate the distance by taking random co-ordinate
 class RandomCoordinate(APIView):
     def get(self, request):
@@ -120,7 +122,6 @@ class RandomCoordinate(APIView):
 
     #by taking the random co-ordinate
     def post(self, request):
-        user=self.request.user
         self.lat1 = radians(27.7493)
         self.lon1 = radians(85.3214)
         self.lat2 = radians(27.6723547)
@@ -132,3 +133,70 @@ class RandomCoordinate(APIView):
         self.a=(sin(self.dlat/2)**2+cos(self.lat1)*cos(self.lat2)*sin(self.dlon/2)**2)
         print({"Result of random co-ordinate":self.a})
         return HttpResponse("successful:")
+
+
+#bulk create
+class AccountBulkCreate(APIView):
+    def post(self, request, **kwargs):
+        accounts = [
+        {
+            'username':2,
+            'country':'Nepal',
+            'biography':'EthicalHacker',
+            'phone_number':9878675645,
+            'birthday':'2022-3-2',
+        },
+        {
+            'username':3,
+            'country':'Nepal',
+            'biography':'Data Scientist',
+            'phone_number':9878675645,
+            'birthday':'2022-3-1'
+        },
+        {
+            'username':4,
+            'country':'Nepal',
+            'biography':'asdf',
+            'phone_number':9878675645,
+            'birthday':'2022-3-4'
+        },
+        {
+            'username':5,
+            'country':'Nepal',
+            'biography':'asdf',
+            'phone_number':9878675645,
+            'birthday':'2022-4-5'
+        },
+        {
+            'username':6,
+            'country':'Nepal',
+            'biography':'asd',
+            'phone_number':9878675645,
+            'birthday':'2022-5-6'
+        }
+        ]
+        new = list()
+        for a in accounts:
+            try:
+                u= User.objects.get(id=a['username'])
+                print(u,'ad')
+            except ObjectDoesNotExist:
+                pass
+            else:
+                a['username'] = u
+
+            new.append(a)
+
+        data = list()
+        for n in new:
+            data.append(
+                Account(
+                    username = n['username'],
+                    country = n['country'],
+                    biography = n['biography'],
+                    phone_number= n['phone_number'],
+                    birthday=n['birthday'],
+                    ))
+        obj = Account.objects.bulk_create(data)
+        data = AccountSerializer(obj, many = True).data
+        return Response(data, status = status.HTTP_201_CREATED)
