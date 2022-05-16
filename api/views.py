@@ -8,7 +8,7 @@ from django.core import exceptions
 
 from rest_framework.decorators import api_view
 from math import sin, cos, radians
-from accounts.models import Location, Account
+from accounts.models import Location, Account, Interest
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
@@ -161,25 +161,26 @@ class AccountBulkCreate(APIView):
 
 
     def post(self, request, **kwargs):
-        accounts = [
-        {
-            'username':2,
-            'country':'Nepal',
-            'biography':'EthicalHacker',
-            'phone_number':9878675645,
-            'birthday':'2022-3-2',
-            
-        },
-        {
-            'username':3,
-            'country':'Nepal',
-            'biography':'Pythondeveloper',
-            'phone_number':9878675645,
-            'birthday':'2022-4-5',
-        }
+        account1=Account.objects.get(id=2)
+        print(account1,'---------------')
+        area_of_interest1=Interest.objects.get(id=1)
+        print(area_of_interest1,'------------')
+        accounts_obj = [
+            Account.area_of_interest.through(
+                area_of_interest1=area_of_interest1.id,
+                account1=account1.id,
+            ),
+            {
+                'username':2,
+                'country':'Nepal',
+                'biography':'EthicalHacker',
+                'phone_number':9878675645,
+                'birthday':'2022-3-2',
+                'area_of_interest':1
+            }
         ]
         new = list()
-        for a in accounts:
+        for a in accounts_obj:
             try:
                 u = User.objects.get(id=a['username'])
             except ObjectDoesNotExist:

@@ -64,6 +64,7 @@ class Account(models.Model):
 
     class Meta:
         ordering=('username',)
+        verbose_name_plural='Accounts'
 
     def __str__(self):
         return "{}".format(self.username)
