@@ -60,6 +60,7 @@ class Account(models.Model):
     biography = models.TextField(null=True, blank=True)
     phone_number = models.PositiveIntegerField()
     birthday = models.DateField()
+    area_of_interest = models.ManyToManyField(Interest, related_name='accounts', null=True, blank=True)
 
     class Meta:
         ordering=('username',)
