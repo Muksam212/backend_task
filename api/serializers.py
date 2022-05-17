@@ -12,10 +12,10 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class InterestSerializer(serializers.ModelSerializer):
     #this is called nested serializers
-    # accounts=AccountSerializer(many=True, read_only=True)
+    accounts=AccountSerializer(many=True, read_only=True)
     class Meta:
         model = Interest
-        fields = ('id','interest_name')
+        fields = ('id','accounts')
 
 class DocumentSerializer(serializers.ModelSerializer):
     #this is called nested serializer
