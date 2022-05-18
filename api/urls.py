@@ -5,7 +5,7 @@ from knox import views as knox_views
 
 from api.views import (AccountList, AccountDetails
 ,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails, LoginAPI,
-RegisterAPI,DistanceFormula, RandomCoordinate,AccountBulkCreate)
+RegisterAPI,DistanceFormula, RandomCoordinate,AccountBulkCreate,AccountBulkUpdate)
 
 
 app_name = 'api'
@@ -46,4 +46,5 @@ urlpatterns = [
 
     #for bulk_create
     path('api/bulkcreate/',AccountBulkCreate.as_view(), name='bulk-create'),
+    path('api/bulkupdate/', AccountBulkUpdate.as_view(), name='bulk-update'),
 ]

@@ -5,7 +5,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.core import exceptions
 
-
 from rest_framework.decorators import api_view
 from math import sin, cos, radians
 from accounts.models import Location, Account, Interest
@@ -93,8 +92,8 @@ class LoginAPI(LoginView):
         login(request,user)
         return super(LoginAPI,self).post(request,format=None)
 
-#calculate the distance between two points
 
+#calculate the distance between two points
 class DistanceFormula(APIView):
     def get(self, **kwargs):
         id = self.kwargs.get('id')
@@ -136,7 +135,7 @@ class RandomCoordinate(APIView):
         return HttpResponse("successful:")
 
 
-#bulk create
+#bulk create using through
 class AccountBulkCreate(APIView):
     def post(self, request):
         accounts_obj = [
@@ -146,6 +145,14 @@ class AccountBulkCreate(APIView):
                 'biography': 'EthicalHacker',
                 'phone_number': 9878675645,
                 'birthday': '2022-3-2',
+                'area_of_interest': 1,
+            },
+            {
+                'username': 3,
+                'country':'China',
+                'biography': 'Game Development',
+                'phone_number': 9878675646,
+                'birthday': '2022-3-3',
                 'area_of_interest': 2,
             }
         ]
@@ -169,23 +176,76 @@ class AccountBulkCreate(APIView):
                     country = n['country'],
                     biography = n['biography'],
                     phone_number= n['phone_number'],
-                    birthday = n['birthday'],
-                    area_of_interest = n['area_of_interest']
+                    birthday = n['birthday']
                     ))
         obj = Account.objects.bulk_create(data)
-
-        for a in accounts_obj:
+        temp = list()
+        for n in new:
             try:
-                acc = Account.objects.get(username = a['username'])
+                acc = Account.objects.get(username=n['username'])
             except ObjectDoesNotExist:
                 pass
             else:
                 try:
-                    interest = Interest.objects.get(id = a['area_of_interest'])
+                    interest=Interest.objects.get(id = n['area_of_interest'])
                 except ObjectDoesNotExist:
                     pass
                 else:
-                    acc.area_of_interest.add(interest)
+                    temp.append(
+                            Account.area_of_interest.through(
+                                account = acc,
+                                interest = interest
+                            )
+                        )
+                    Account.area_of_interest.through.objects.bulk_create(temp, ignore_conflicts = True)
 
         data = AccountSerializer(Account.objects.all(), many = True).data
         return Response(data, status = status.HTTP_201_CREATED)
+
+
+class AccountBulkUpdate(APIView):
+    def post(self, request):
+        accounts_obj = [
+            {
+                'username': 2,
+                'country':'China',
+                'biography': 'EthicalHacker',
+                'phone_number': 100,
+                'birthday': '2022-3-2',
+                'area_of_interest': [1],
+            },
+            {
+                'username': 3,
+                'country':'Japan',
+                'biography': 'Data Visualization',
+                'phone_number': 10033,
+                'birthday': '2022-3-14',
+                'area_of_interest': [2],
+            }
+        ]
+
+        updates = list()
+        for a in accounts_obj:
+            try:
+                acc = Account.objects.prefetch_related('area_of_interest').get(username__id = a['username'])
+            except ObjectDoesNotExist:
+                pass
+            else: 
+                acc.area_of_interest.clear()
+
+        #update the data
+        for a in accounts_obj:
+            try:
+                acc = Account.objects.prefetch_related('area_of_interest').get(username__id = a['username'])
+            except ObjectDoesNotExist:
+                pass
+            else: 
+                for i in a['area_of_interest']:
+                    try:
+                        interest = Interest.objects.get(id = i)
+                    except ObjectDoesNotExist:
+                        pass
+                    else:        
+                        acc.area_of_interest.add(interest)
+
+        return Response(status = status.HTTP_201_CREATED)
