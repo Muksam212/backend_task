@@ -203,6 +203,7 @@ class AccountBulkCreate(APIView):
         return Response(data, status = status.HTTP_201_CREATED)
 
 
+#for bulk update
 class AccountBulkUpdate(APIView):
     def post(self, request):
         accounts_obj = [
@@ -233,7 +234,7 @@ class AccountBulkUpdate(APIView):
             else: 
                 acc.area_of_interest.clear()
 
-        #update the data
+        #update the data using prefetch_related
         for a in accounts_obj:
             try:
                 acc = Account.objects.prefetch_related('area_of_interest').get(username__id = a['username'])

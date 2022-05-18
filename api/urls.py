@@ -8,6 +8,7 @@ from api.views import (AccountList, AccountDetails
 RegisterAPI,DistanceFormula, RandomCoordinate,AccountBulkCreate,AccountBulkUpdate)
 
 
+#using custom url
 app_name = 'api'
 
 urlpatterns = [
@@ -46,5 +47,6 @@ urlpatterns = [
 
     #for bulk_create
     path('api/bulkcreate/',AccountBulkCreate.as_view(), name='bulk-create'),
+    #for bulk update
     path('api/bulkupdate/', AccountBulkUpdate.as_view(), name='bulk-update'),
 ]
