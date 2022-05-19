@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.core import exceptions
 
+
 from rest_framework.decorators import api_view
 from math import sin, cos, radians
 from accounts.models import Location, Account, Interest
@@ -19,6 +20,7 @@ from api.serializers import RegisterSerializer, UserSerializer
 from knox.views import LoginView
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework import status
+
 
 
 # Create your views here.
@@ -250,3 +252,4 @@ class AccountBulkUpdate(APIView):
                         acc.area_of_interest.add(interest)
 
         return Response(status = status.HTTP_201_CREATED)
+

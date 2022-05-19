@@ -49,4 +49,6 @@ urlpatterns = [
     path('api/bulkcreate/',AccountBulkCreate.as_view(), name='bulk-create'),
     #for bulk update
     path('api/bulkupdate/', AccountBulkUpdate.as_view(), name='bulk-update'),
+
+    #send birthday message
 ]
