@@ -1,8 +1,9 @@
 from django.urls import path
-from api import views
-from knox import views as knox_views
-#Knox provides easy to use authentication for Django REST Framework
 
+#Knox provides easy to use authentication for Django REST Framework
+from knox import views as knox_views
+
+from api import views
 from api.views import (AccountList, AccountDetails
 ,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails, LoginAPI,
 RegisterAPI,DistanceFormula, RandomCoordinate,AccountBulkCreate,AccountBulkUpdate)

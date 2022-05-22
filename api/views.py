@@ -5,21 +5,26 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.core import exceptions
 
+from math import sin, cos, radians
 
 from rest_framework.decorators import api_view
-from math import sin, cos, radians
-from accounts.models import Location, Account, Interest
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
-from api.serializers import AccountSerializer, DocumentSerializer, InterestSerializer, LocationSerializer
-from rest_framework import generics, mixins
-from accounts.models import Account, Document, Interest, Location
-from knox.models import AuthToken
-from api.serializers import RegisterSerializer, UserSerializer
-from knox.views import LoginView
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework import status
+from rest_framework import generics, mixins
+
+from accounts.models import Location, Account, Interest
+from accounts.models import Account, Document, Interest, Location
+
+from api.serializers import AccountSerializer, DocumentSerializer, InterestSerializer, LocationSerializer
+from api.serializers import RegisterSerializer, UserSerializer
+
+
+from knox.models import AuthToken
+from knox.views import LoginView
+
 
 
 
