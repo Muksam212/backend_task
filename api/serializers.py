@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    #nested serializer
     class Meta:
         model=Account
         fields=('username','country','biography','phone_number','birthday','area_of_interest')

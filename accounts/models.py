@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.http import HttpResponse
-from django.template.defaultfilters import slugify
 # Create your models here.
 
 
@@ -55,7 +54,7 @@ class Location(models.Model):
 
 
 class Account(models.Model):
-    username=models.OneToOneField(User, on_delete=models.CASCADE)
+    username = models.OneToOneField(User, on_delete=models.CASCADE)
     country = models.CharField(max_length=100)
     biography = models.TextField(null=True, blank=True)
     phone_number = models.PositiveIntegerField()
