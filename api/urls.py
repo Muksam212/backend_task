@@ -1,11 +1,11 @@
 from django.urls import path
-from api import views
-from knox import views as knox_views
+
 #Knox provides easy to use authentication for Django REST Framework
 
+from api import views
 from api.views import (AccountList, AccountDetails
-,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails, LoginAPI,
-RegisterAPI,DistanceFormula, RandomCoordinate,AccountBulkCreate,AccountBulkUpdate)
+,DocumentList,DocumentDetails, LocationList, LocationDetails, InterestList, InterestDetails
+,DistanceFormula, RandomCoordinate,AccountBulkCreate,AccountBulkUpdate)
 
 
 #using custom url
@@ -29,15 +29,6 @@ urlpatterns = [
     path('api/location/', LocationList.as_view(), name='location-list'),
     path('api/<int:id>/location/', LocationDetails.as_view(), name='location-details'),
 
-    #register
-    path('api/register/', RegisterAPI.as_view(), name='register'),
-
-    #login
-    path('api/login/', LoginAPI.as_view(), name='login'),
-
-    #logout
-    path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
-    path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
 
     #to return the geojson
     path('api/<int:id>/account/line/', DistanceFormula.as_view(), name='get-distance'),
@@ -50,5 +41,6 @@ urlpatterns = [
     #for bulk update
     path('api/bulkupdate/', AccountBulkUpdate.as_view(), name='bulk-update'),
 
-    #send birthday message
+    #for api tokens
+
 ]

@@ -18,10 +18,18 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
+
+from api.views import RegistrationAPIView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),
     path('', include('accounts.urls')),
+
+    path('api/register/', RegistrationAPIView.as_view(), name='auth-register'),
+    path('api/login/', TokenObtainPairView.as_view(), name='login'),
+    path('api/refresh-token/', TokenRefreshView.as_view(), name='refreshtoken')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,6 +3,5 @@ Django==3.2.6
 django-bulkmodel==0.3.0
 django-rest-knox==4.2.0
 djangorestframework==3.13.1
-packaging==21.3
-pytz==2022.1
+djangorestframework-simplejwt==5.1.0
 redis==4.3.1
