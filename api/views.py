@@ -6,30 +6,41 @@ from django.contrib.auth.models import User
 from django.core import exceptions
 
 from math import sin, cos, radians
+import uuid
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework import status
+from rest_framework import status,serializers
 from rest_framework import generics, mixins
+from rest_framework import status
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from accounts.models import Location, Account, Interest
 from accounts.models import Account, Document, Interest, Location
 
-from api.serializers import AccountSerializer, DocumentSerializer, InterestSerializer, LocationSerializer
-from api.serializers import RegisterSerializer, UserSerializer
-
-
-from knox.models import AuthToken
-from knox.views import LoginView
-
-
+from api.serializers import (AccountSerializer, DocumentSerializer, InterestSerializer, LocationSerializer, RegisterSerializer)
 
 
 # Create your views here.
+#registration api views
+class RegistrationAPIView(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
 
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        # serializer.is_valid(raise_exception = True)
+        # serializer.save()
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response({
+                'RequestId': str(uuid.uuid4()),
+                'Message':'User Created Successfully',
+                'User':serializer.data},
+            status=status.HTTP_201_CREATED)
+        return Response({'Errors':serializers.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 #Interest Api
 class InterestList(generics.ListCreateAPIView):
@@ -65,6 +76,8 @@ class LocationDetails(generics.RetrieveUpdateDestroyAPIView):
 
 #Accounts api
 class AccountList(generics.ListCreateAPIView):
+    authentication_classes=[JWTAuthentication]
+
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
     ordering_fields=['username',]
@@ -74,30 +87,6 @@ class AccountDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AccountSerializer
     lookup_field = 'id'
 
-
-#Register through api
-class RegisterAPI(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response({
-        "user": UserSerializer(user, context=self.get_serializer_context()).data,
-        "token": AuthToken.objects.create(user)[1]
-        })
-
-#Login through API
-class LoginAPI(LoginView):
-    permission_classes =(permissions.AllowAny,)
-
-    def post(self, request, format=None):
-        serializer = AuthTokenSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request,user)
-        return super(LoginAPI,self).post(request,format=None)
 
 
 #calculate the distance between two points
@@ -208,7 +197,6 @@ class AccountBulkCreate(APIView):
 
         data = AccountSerializer(Account.objects.all(), many = True).data
         return Response(data, status = status.HTTP_201_CREATED)
-
 
 #for bulk update
 class AccountBulkUpdate(APIView):
