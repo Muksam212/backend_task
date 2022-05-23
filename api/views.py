@@ -208,7 +208,7 @@ class AccountBulkUpdate(APIView):
                 'biography': 'EthicalHacker',
                 'phone_number': 100,
                 'birthday': '2022-3-2',
-                'area_of_interest': [1],
+                'area_of_interest': [2],
             },
             {
                 'username': 3,
@@ -216,7 +216,7 @@ class AccountBulkUpdate(APIView):
                 'biography': 'Data Visualization',
                 'phone_number': 10033,
                 'birthday': '2022-3-14',
-                'area_of_interest': [2],
+                'area_of_interest': [1],
             }
         ]
 
